@@ -29,7 +29,6 @@ app.get('/discover/movie', async (req, res) => {
     console.log(`Can not find movies for genre ${genreId}: fetch from themoviedb!`)
     const discoverMovieEndpoint = '/discover/movie';
     const requestParams = `?api_key=${tmdbKey}&with_genres=${genreId}`;
-    // const urlToFetch = tmdbBaseUrl+discoverMovieEndpoint+requestParams;
     const urlToFetch = tmdbBaseUrl + discoverMovieEndpoint + requestParams;
     try {
       const response = await fetch(urlToFetch);
@@ -47,6 +46,34 @@ app.get('/discover/movie', async (req, res) => {
   const genreMovies = JSON.parse(dataAsText);
   res.send(genreMovies);
 })
+
+app.get('/movie/:id', async (req, res) => {
+  console.log("/movie/:id params ", req.params)
+  const movieId = req.params.id;
+  const filePath = `data/movie-${movieId}.json`;
+  if (fs.existsSync(filePath)) {
+    console.log(`Found movie ${movieId} in local DB! YAY!`);
+  } else {
+    try {
+      console.log(`Can not find movie ${movieId}: fetch from themoviedb!`)
+      const movieEndpoint = `/movie/${movieId}`;
+      const requestParams = `?api_key=${tmdbKey}`;
+      const urlToFetch =  tmdbBaseUrl + movieEndpoint + requestParams;
+      const response = await fetch(urlToFetch);
+      if (response.ok) {
+        const jsonResponse = await response.json();
+        console.log("Got movie info from themoviedb --> storing to local");
+        fs.writeFileSync(filePath, JSON.stringify(jsonResponse))
+      }
+    } catch (e) {
+      console.log(" Error getting movie info: ", e);
+    }
+  }
+  const dataAsText = fs.readFileSync(filePath, 'utf8');
+  const movieObj = JSON.parse(dataAsText);
+  res.json(movieObj);
+})
+
 
 app.post('/api/movie/like', (req, res) => {
  console.log("Request body: ", req.body.movieId);
@@ -69,4 +96,3 @@ app.post('/api/movie/like', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`) // http://localhost:3000
 });
-
