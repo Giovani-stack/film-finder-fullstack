@@ -105,9 +105,7 @@ const displayMovie = (movieInfo) => {
 
 
 const displayCarousel = (movieDetails) => {
-  const carouselDiv = document.getElementById('carousel');
-  const carouselItems = document.createElement('div');
-  carouselItems.setAttribute('class', 'carousel-items');
+  const carouselEl = document.getElementById('carousel');
 
   for (const movie of movieDetails) {
     const item = document.createElement('li');
@@ -122,8 +120,8 @@ const displayCarousel = (movieDetails) => {
     movieInfo.innerHTML = `<h4>${movie.production_companies[0].name}</h4>`;
     item.appendChild(movieInfo);
 
-    carouselItems.appendChild(item);
+    carouselEl.appendChild(item);
   }
-  carouselDiv.appendChild(carouselItems);
+
 };
 

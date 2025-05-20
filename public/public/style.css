@@ -96,50 +96,71 @@ select {
   color: #910000;
 }
 
+/* Tidied Carousel Styles */
 #carousel {
-  width: 100vw;
-  height: 300px;
-  padding: 10px;
+  display: flex; /* Use flexbox for horizontal layout of items */
+  overflow-x: auto; /* Allow horizontal scrolling; 'auto' shows scrollbar only when needed */
+  scroll-snap-type: x mandatory; /* Enable snap scrolling on the x-axis */
 
-  overflow-x: scroll;
-  scroll-snap-type: x mandatory;
-
-  columns: 1;
-  text-align: center;
+  width: 100vw; /* Full viewport width. Ensure body has no margin/padding to prevent main scrollbar. */
+  height: 300px; /* Fixed height for the carousel container */
+  padding: 10px; /* Padding inside the carousel, around the group of items */
+  margin: 0; /* Reset default <ul> margin */
+  list-style-type: none; /* Remove default list bullets */
+  box-sizing: border-box; /* Include padding in the element's total width and height */
 }
 
-li {
-  list-style-type: none;
+.carousel-item {
+  flex: 0 0 200px; /* Flex properties: don't grow, don't shrink, base width of 200px */
+  /* width: 200px; /* Covered by flex-basis */
+  height: 100%; /* Each item will take the full height of the #carousel (300px) */
+  scroll-snap-align: start; /* Snap items to the start of the scroll container */
 
-  display: inline-block;
-  height: 100%;
-  width: 200px;
+  background-color: #eee; /* Default background for items */
+  border: 1px solid #ddd; /* Border for items */
+  padding: 20px; /* Padding inside each item */
+  margin: 0 10px; /* Margin between items (results in 20px gap) */
+                  /* The first/last item will also have this margin relative to #carousel's padding */
 
-  background-color: #eee;
-  border: 1px solid #ddd;
-  padding: 20px;
-  margin: 0 10px;
+  text-align: left; /* Align text to the left within items */
+  box-sizing: border-box; /* Include padding and border in the item's total width and height */
 
-  text-align: left;
+  display: flex; /* Use flexbox to arrange content (image, text) within the item */
+  flex-direction: column; /* Stack item's children vertically */
+  /* align-items: center; */ /* Optional: if you want to center content like the image horizontally */
 }
 
-li:nth-child(even) {
-  background-color: cyan;
+.carousel-item img {
+  display: block; /* Removes extra space beneath the image */
+  height: 200px; /* Matches the height attribute in your HTML */
+  width: auto; /* Adjust width to maintain aspect ratio */
+  max-width: 100%; /* Ensure image doesn't overflow its allocated space in the item */
+  object-fit: contain; /* Scales the image to fit within its bounds while maintaining aspect ratio. Use 'cover' if you prefer to fill and crop. */
+  margin: 0 auto 10px auto; /* Centers image horizontally if its width is less than container, and adds 10px bottom margin */
 }
 
-ul::column {
-  scroll-snap-align: center;
+.carousel-item .movie-info {
+  text-align: center; /* Center the text (e.g., movie studio name) */
+  width: 100%;
 }
 
-ul::column::scroll-marker {
-  content: "";
-  width: 16px;
-  height: 16px;
-  background-color: transparent;
-  border: 2px solid black;
-  border-radius: 10px;
+.carousel-item .movie-info h4 {
+  margin: 0; /* Remove default h4 margin */
+  font-size: 1em; /* Adjust as needed */
+  color: #333; /* Example text color, adjust if needed */
 }
+  /*
+  .carousel-item:nth-child(even) {
+    background-color: cyan; /* Alternating background color from your original CSS */
+  } */
 
-ul::column::scroll-marker:target-current {
-  background-color: black;
-}
+/*
+  The following ::column selectors are non-standard for this type of scroll snapping
+  and have been removed. Scroll snapping is handled by 'scroll-snap-type' on
+  the #carousel container and 'scroll-snap-align' on .carousel-item elements.
+*/
+/*
+ul::column { ... }
+ul::column::scroll-marker { ... }
+ul::column::scroll-marker:target-current { ... }
+*/
