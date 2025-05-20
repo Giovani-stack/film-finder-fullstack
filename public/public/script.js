@@ -88,7 +88,10 @@ const showRandomMovie = async () => {
   displayMovie(randomMovie); // lo visualizzo
 
   // scarico i dettagli completi dei pprimi cinque film
-  const movieDetails = await getMovieDetails(movies.slice(0, 5));
+  const shuffledMovies = movies.sort(() => 0.5 - Math.random());
+  const fiveRandomMovies = shuffledMovies.slice(0, 5);
+
+  const movieDetails = await getMovieDetails(fiveRandomMovies);
   displayCarousel(movieDetails); // visualizzo il carosello
 };
 
