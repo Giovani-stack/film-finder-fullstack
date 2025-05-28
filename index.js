@@ -96,3 +96,24 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`) // http://localhost:3000
 });
 
+const movieToGenreIds = (movieId) => {
+  const movieDataAsText = fs.readFileSync(`data/movie-${movieId}.json`, 'utf8');
+  const movieObj = JSON.parse(movieDataAsText);
+  const genresIds = movieObj.genres.map(g => g.id);
+  return genresIds;
+}
+
+const readVotesFromFile = () => {
+  const votesDataAsText = fs.readFileSync('data/votes.json', 'utf8');
+  const votesData = JSON.parse(votesDataAsText);
+  console.log(votesData);
+  return votesData.likes;
+}
+
+app.get('/recommendations', (req, res) => {
+  const likedMovieIds = readVotesFromFile();
+  console.log("Liked movie IDs: ", likedMovieIds);
+  const likedGenresIds = likedMovieIds.map(movieToGenreIds).flat();
+  console.log("Liked genres IDs: ", likedGenresIds);
+  res.status(200).json({message: 'This is a placeholder for recommendations'});
+});
