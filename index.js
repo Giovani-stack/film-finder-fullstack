@@ -42,9 +42,9 @@ app.get('/movie/:movieId', async (req, res) => {
     console.log("Getting movie details for ", movieId);
     const movieEndpoint = `/movie/${movieId}`;
     const requestParams = `?api_key=${tmdbKey}`;
-    const urlToFetch = tmdbBaseUrl + movieEndpoint + requestParams;
+    const url = tmdbBaseUrl + movieEndpoint + requestParams;
     try {
-      const response = await fetch(urlToFetch);
+      const response = await fetch(url);
       if (response.ok) {
         const jsonResponse = await response.json();
         console.log("Got movie info: ", jsonResponse);
