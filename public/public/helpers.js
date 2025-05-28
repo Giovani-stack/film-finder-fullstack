@@ -27,8 +27,10 @@ const clearCurrentMovie = () => {
   const moviePosterDiv = document.getElementById('moviePoster');
   const movieTextDiv = document.getElementById('movieText');
   const carousel = document.getElementById('carousel');
+  const movieTitleDiv = document.getElementById('movieTitle');
   moviePosterDiv.innerHTML = '';
   movieTextDiv.innerHTML = '';
+  movieTitleDiv.innerHTML = '';
   carousel.innerHTML = '';
 }
 
@@ -117,12 +119,12 @@ const displayMovie = (movieInfo) => {
 
   // Create HTML content containing movie info
   const moviePoster = createMoviePoster(movieInfo.poster_path);
-  const titleHeader = createMovieTitle(movieInfo.title);
+  const movieTitle = createMovieTitle(movieInfo.title);
   const overviewText = createMovieOverview(movieInfo.overview);
 
   // Append title, poster, and overview to page
   moviePosterDiv.appendChild(moviePoster);
-  movieTextDiv.appendChild(titleHeader);
+  movieTextDiv.appendChild(movieTitle);
   movieTextDiv.appendChild(overviewText);
   document.getElementById("likeBtn").setAttribute("movieId", movieInfo.id);
 
@@ -136,22 +138,26 @@ const displayCarousel = (movieDetails) => {
   const carouselDiv = document.getElementById('carousel');
   const carouselItems = document.createElement('div');
   carouselItems.setAttribute('class', 'carousel-items');
+  carouselItems.setAttribute('class', 'title');
 
   for (const movie of movieDetails) {
     const item = document.createElement('li');
     item.setAttribute('class', 'carousel-item');
+    item.setAttribute('class', 'title');
     const img = document.createElement('img');
     img.setAttribute('src', `https://image.tmdb.org/t/p/original/${movie.poster_path}`);
     img.setAttribute('height', '200px');
     item.appendChild(img);
+    
 
     const movieInfo = document.createElement('div');
-    movieInfo.setAttribute('class', 'movie-info');
-    movieInfo.innerHTML = `<h4>${movie.production_companies[0].name}</h4>`;
+    movieInfo.setAttribute('class', 'title', 'movie-info');
+    movieInfo.innerHTML = `<h3>${movie.title} ${movie.production_companies[0].name}</h3>`; 
     item.appendChild(movieInfo);
 
     carouselItems.appendChild(item);
   }
+  
   carouselDiv.appendChild(carouselItems);
 };
 
