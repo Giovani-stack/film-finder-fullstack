@@ -61,11 +61,20 @@ app.get('/movie/:movieId', async (req, res) => {
   res.send(movieData)
 });
 
+
+//CREATED NEW FUNCTION GENREMOVIES
+const getMovieFromGenre= (genreId) => {
+  console.log("Getting movies from genreId: ", genreId);
+  const dataAsText = fs.readFileSync(`data/genre-movies-${genreId}.json`, `utf8`);
+  const genreMovies= JSON.parse(dataAsText);
+  return genreMovies;
+}
+
+
 app.get('/discover/movie', (req, res) => {
   console.log("/discover/movie params: ", req.query)
-  const genreId = req.query.with_genres; // <-- SECURITY THREAT!
-  const dataAsText = fs.readFileSync(`data/genre-movies-${genreId}.json`, 'utf8');
-  const genreMovies = JSON.parse(dataAsText);
+  const genreId = req.query.with_genres; // <-- SECURITY THREAT
+  const genreMovies=getMoviesFrom(genreId);
   res.send(genreMovies);
 })
 
@@ -110,10 +119,37 @@ const readVotesFromFile = () => {
   return votesData.likes;
 }
 
+
 app.get('/recommendations', (req, res) => {
   const likedMovieIds = readVotesFromFile();
   console.log("Liked movie IDs: ", likedMovieIds);
   const likedGenresIds = likedMovieIds.map(movieToGenreIds).flat();
   console.log("Liked genres IDs: ", likedGenresIds);
+  // Qui estraiamo il generere più frequente tra i generi dei film che l'utente ha messo "mi piace"
+  const mostFrequent = mostFrequentGenre(likedGenresIds);
+  console.log("Most frequent genre ID: ", mostFrequent);
+  const genreMoviesData= getMovieFromGenre(mostFrequent);
+  console.log("Genre movies data: ", genreMoviesData);
+
   res.status(200).json({message: 'This is a placeholder for recommendations'});
 });
+
+
+
+const mostFrequentGenre = (genreIds) => {
+  const frequency = {};
+  let maxCount = 0;
+  let mostFrequent;
+
+  for (let i = 0; i < genreIds.length; i++) {
+    const genreId = genreIds[i];
+    frequency[genreId] = (frequency[genreId] || 0) + 1;
+    console.log("Frequency: ", frequency);
+    // Trovo il genere più frequente
+    if (frequency[genreId] > maxCount) {
+      maxCount = frequency[genreId];
+      mostFrequent = genreId;
+    }
+  }
+  return mostFrequent;
+}
