@@ -28,10 +28,12 @@ const clearCurrentMovie = () => {
   const movieTextDiv = document.getElementById('movieText');
   const carousel = document.getElementById('carousel');
   const movieTitleDiv = document.getElementById('movieTitle');
+  const favoritecarousel=document.getElementById('carousel');
   moviePosterDiv.innerHTML = '';
   movieTextDiv.innerHTML = '';
   movieTitleDiv.innerHTML = '';
   carousel.innerHTML = '';
+  favoritecarousel.innerHTML='';
 }
 
 // After liking a movie, clears the current movie from the screen and gets another random movie
@@ -152,12 +154,23 @@ const displayCarousel = (movieDetails) => {
 
     const movieInfo = document.createElement('div');
     movieInfo.setAttribute('class', 'title', 'movie-info');
-    movieInfo.innerHTML = `<h3>${movie.title} ${movie.production_companies[0].name}</h3>`; 
+    movieInfo.innerHTML = `<h4>${movie.title} <br><bt>
+    ${movie.production_companies[0].name}</h4>`; 
     item.appendChild(movieInfo);
 
     carouselItems.appendChild(item);
   }
-  
+
   carouselDiv.appendChild(carouselItems);
 };
 
+//scrivo una funzione per visualizzare i film preferiti nel nuovo carosello
+const displayRecommendedMovieCarousel = (movieDetails) => {
+const newCarouselDiv = document.getElementById('favoritecarousel');
+const favoriteCarousel = document.createElement('div');
+favoriteCarousel.setAttribute('class', 'title');
+newCarouselDiv.appendChild(favoriteCarousel);
+
+
+
+}
