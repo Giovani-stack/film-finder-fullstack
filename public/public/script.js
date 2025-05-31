@@ -5,13 +5,13 @@ const tmdbBaseLocale = 'http://localhost:3000';
 const playBtn = document.getElementById('playBtn');
 
 const getGenres = async () => {
-   const genreRequestEndpoint = '/genre/movie/list';
-   const queryString = `?api_key=${tmdbKey}`;
+  const genreRequestEndpoint = '/genre/movie/list';
+  const queryString = `?api_key=${tmdbKey}`;
   //  const urlToFetch = tmdbBaseUrl + genreRequestEndpoint + queryString;
-   const urlToFetch = tmdbBaseLocale + genreRequestEndpoint + queryString;
+  const url = tmdbBaseUrl + genreRequestEndpoint + queryString;
   //  return [];
-   try {
-    const response = await fetch(urlToFetch);
+  try {
+    const response = await fetch(url);
     if (response.ok) {
       console.log(" GOT RESPONSE: " + response.body);
       const jsonResponse = await response.json();
@@ -20,9 +20,9 @@ const getGenres = async () => {
       console.log("Genres are: ", genreList);
       return genreList;
     }
-   } catch (e) {
+  } catch (e) {
     console.log("ERROR ", e);
-   }
+  }
 };
 
 const getMovies = async () => {
@@ -30,9 +30,9 @@ const getMovies = async () => {
   const discoverMovieEndpoint = '/discover/movie';
   const requestParams = `?api_key=${tmdbKey}&with_genres=${selectedGenre}`;
   // const urlToFetch = tmdbBaseUrl+discoverMovieEndpoint+requestParams;
-  const urlToFetch = tmdbBaseLocale+discoverMovieEndpoint+requestParams;
+  const url = tmdbBaseUrl + discoverMovieEndpoint + requestParams;
   try {
-    const response = await fetch(urlToFetch);
+    const response = await fetch(url);
     if (response.ok) {
       const jsonResponse = await response.json();
       console.log(" Got discover movie response ", jsonResponse);
@@ -52,9 +52,9 @@ const getMovieInfo = async (movie) => {
   const movieId = movie.id;
   const movieEndpoint = `/movie/${movieId}`;
   const requestParams = `?api_key=${tmdbKey}`;
-  const urlToFetch = tmdbBaseLocale + movieEndpoint + requestParams;
+  const url = tmdbBaseLocale + movieEndpoint + requestParams;
   try {
-    const response = await fetch(urlToFetch);
+    const response = await fetch(url);
     if (response.ok) {
       const jsonResponse = await response.json();
       console.log("Got movie info: ", jsonResponse);
@@ -89,8 +89,15 @@ const showRandomMovie = async () => {
   displayMovie(randomMovie); // lo visualizzo
 
   // scarico i dettagli completi dei pprimi cinque film
-  const movieDetails = await getMovieDetails(movies.slice(0, 5));
+  const movieDetails = await getMovieDetails(movies);
   displayCarousel(movieDetails); // visualizzo il carosello
+
+//scrivo una funzione per visualizzare il nuovo carosello  
+//const recommendend movies= await getRecommended movies()
+const recommendedMovies=[{"id": 977294,"poster_path":"/lFFDrFLXywFhy6khHes1LCFVMsL.jpg", "title": "Tin Soldier"}];
+console.log("Going to display recommended movies: ", recommendedMovies);
+displayRecommendedMovieCarousel(recommendedMovies);
+//esce il carosello dei film suggeriti
 };
 
 getGenres().then(populateGenreDropdown);
