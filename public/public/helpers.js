@@ -171,6 +171,14 @@ const favoriteCarousel = document.createElement('div');
 favoriteCarousel.setAttribute('class', 'title');
 newCarouselDiv.appendChild(favoriteCarousel);
 
-
+ for (const movie of movieDetails) {
+    const showCarousel = document.createElement('li');
+    showCarousel.setAttribute('class', 'favorite-carousel');
+    showCarousel.setAttribute('class', 'title');
+    const img = document.createElement('img');
+    img.setAttribute('src', `https://image.tmdb.org/t/p/original/${movie.poster_path}`);
+    img.setAttribute('height', '100px');
+   showCarousel.appendChild('showCarousel');
 
 }
+};
