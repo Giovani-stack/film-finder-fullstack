@@ -91,16 +91,38 @@ const showRandomMovie = async () => {
   // scarico i dettagli completi dei pprimi cinque film
   const movieDetails = await getMovieDetails(movies);
   displayCarousel(movieDetails); // visualizzo il carosello
+  getRecommendedMovies();
+}
+
+//aggiungo una funzione async per far uscire i movies a cui metto like
+const getRecommendedMovies = async () => {
+const likeMovieEndPoint = '/recommendations';
+const urlToFetch= tmdbBaseLocale+ likeMovieEndPoint; 
+  try {
+    const response = await fetch(urlToFetch);
+    if (response.ok) {
+      const suggestedMovies = await response.json();
+      console.log(" Going to show new carousel", suggestedMovies.suggestedMovies);
+      displayRecommendedMovieCarousel(suggestedMovies.suggestedMovies);
+      //return newCarousel;
+    }
+
+  } catch (e) {
+    console.log(" Error while getting new carousel: ", e);
+  }
+};
+
 
 //scrivo una funzione per visualizzare il nuovo carosello  
-//const recommendend movies= await getRecommended movies()
-const recommendedMovies=[{"id": 977294,"poster_path":"/lFFDrFLXywFhy6khHes1LCFVMsL.jpg", "title": "Tin Soldier"}];
-console.log("Going to display recommended movies: ", recommendedMovies);
-displayRecommendedMovieCarousel(recommendedMovies);
-//esce il carosello dei film suggeriti
-};
+// const recommendendMovies= await getRecommendedMovies();
+// console.log("Going to display recommended movies: ", recommendendMovies);
+// displayRecommendedMovieCarousel();
+//esce il carosello dei film piaciuti
+
+
+
+
 
 getGenres().then(populateGenreDropdown);
 
 playBtn.onclick = showRandomMovie;
-
