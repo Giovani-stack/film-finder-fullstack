@@ -63,9 +63,9 @@ app.get('/movie/:movieId', async (req, res) => {
 
 
 //CREATED NEW FUNCTION GENREMOVIES
-const getMovieFromGenre= (genreId) => {
+const getMoviesFromGenre= (genreId) => {
   console.log("Getting movies from genreId: ", genreId);
-  const dataAsText = fs.readFileSync(`data/genre-movies-${genreId}.json`, `utf8`);
+  const dataAsText = fs.readFileSync(`data/genre-movies-${genreId}.json`, 'utf8');
   const genreMovies= JSON.parse(dataAsText);
   return genreMovies;
 }
@@ -116,26 +116,37 @@ const readVotesFromFile = () => {
   const votesDataAsText = fs.readFileSync('data/votes.json', 'utf8');
   const votesData = JSON.parse(votesDataAsText);
   console.log(votesData);
-  return votesData.likes;
+  return votesData;
 }
 
 
 app.get('/recommendations', (req, res) => {
-  const likedMovieIds = readVotesFromFile();
+  const votedData = readVotesFromFile();
+  const likedMovieIds = votedData.likes;
+  const dislikedMovieIds = votedData.dislikes;
   console.log("Liked movie IDs: ", likedMovieIds);
   const likedGenresIds = likedMovieIds.map(movieToGenreIds).flat();
   console.log("Liked genres IDs: ", likedGenresIds);
   // Qui estraiamo il generere più frequente tra i generi dei film che l'utente ha messo "mi piace"
   const mostFrequent = mostFrequentGenre(likedGenresIds);
   console.log("Most frequent genre ID: ", mostFrequent);
-  const genreMoviesData= getMovieFromGenre(mostFrequent);
+  // Ora dobbiamo trovare i film di quel genere
+  const genreMoviesData = getMoviesFromGenre(mostFrequent);
   console.log("Genre movies data: ", genreMoviesData);
-
-  res.status(200).json({message: 'This is a placeholder for recommendations'});
+  // Infine, restituiamo i primi 5 film di quel genere escludendo quelli che l'utente ha già messo "mi piace"
+  const votedMovieIds = likedMovieIds.concat(dislikedMovieIds);
+  console.log("Voted movie IDs: ", votedMovieIds);
+  const recommendedMovies = genreMoviesData.results.filter(
+    movie => !votedMovieIds.includes(movie.id.toString())
+  ).slice(0, 5);
+  console.log("Recommended movies: ", recommendedMovies);
+  res.status(200).json({suggestedMovies: recommendedMovies});
 });
 
 
-
+// se input [16, 28, 99, 28, 16, 28]
+// allora la frequenza di 16 è 2, la frequenza di 28 è 3, la frequenza di 99 è 1
+// allora output è: 28
 const mostFrequentGenre = (genreIds) => {
   const frequency = {};
   let maxCount = 0;
