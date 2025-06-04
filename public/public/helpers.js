@@ -169,16 +169,24 @@ const displayRecommendedMovieCarousel = (movieDetails) => {
 const newCarouselDiv = document.getElementById('favoritecarousel');
 const favoriteCarousel = document.createElement('div');
 favoriteCarousel.setAttribute('class', 'title');
-newCarouselDiv.appendChild(favoriteCarousel);
 
  for (const movie of movieDetails) {
+  console.log("MOVIE:",movie)
     const showCarousel = document.createElement('li');
     showCarousel.setAttribute('class', 'favorite-carousel');
     showCarousel.setAttribute('class', 'title');
     const img = document.createElement('img');
     img.setAttribute('src', `https://image.tmdb.org/t/p/original/${movie.poster_path}`);
     img.setAttribute('height', '100px');
-   showCarousel.appendChild('showCarousel');
+   showCarousel.appendChild(img);
+const movieInfo = document.createElement('div');
+    movieInfo.setAttribute('class', 'title', 'movie-info');
+    movieInfo.innerHTML = `<h4>${movie.title} <br><bt>
+    ${movie.production_companies?.length ? movie.production_companies[0].name : ""}</h4>`; 
+    showCarousel.appendChild(movieInfo);
 
-}
+    favoriteCarousel.appendChild(showCarousel);
+  }
+
+  newCarouselDiv.appendChild(favoriteCarousel);
 };
