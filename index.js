@@ -5,7 +5,10 @@ console.log("App starting...");
 const express = require('express');
 const fs = require('node:fs');
 const bodyParser = require('body-parser');
-
+const sqlite= require('sqlite3');
+const dbPath= ('C:\\Users\\utente\\Desktop\\dev\\database\\database2500')
+// Create a connection to an in-memory database
+const db = new sqlite.Database(dbPath);
 
 const app = express()
 const port = 3000
@@ -16,11 +19,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const tmdbKey = '4048775a0f068af3048837ff0341a4f7';
 const tmdbBaseUrl = 'https://api.themoviedb.org/3';
 
-app.get('/genre/movie/list', (req, res) => {
-  console.log(req.query);
-  const dataAsText = fs.readFileSync('data/genres.json', 'utf8');
-  const genres = JSON.parse(dataAsText);
-  res.send(genres)
+app.get('/genre/movie/list', async (req, res) => {
+    db.all("SELECT * FROM genres", (err, genres) => {
+    if (err) {
+      console.error("Error fetching genres: ", err);
+      return res.status(500).send("Error fetching genres");
+    }
+    console.log("Genres fetched from database: ", genres);
+  res.json({genres});
+  });
 });
 
 
@@ -36,7 +43,7 @@ app.get('/movie/:movieId', async (req, res) => {
   try {
     fs.statSync(`data/movie-${movieId}.json`);
     console.log("trovato il file!")
-  } catch(error) {
+  } catch (error) {
     // ALLORA LO SCARICO
     // il file non esiste --> lo scarichiamo
     console.log("Getting movie details for ", movieId);
@@ -63,10 +70,10 @@ app.get('/movie/:movieId', async (req, res) => {
 
 
 //CREATED NEW FUNCTION GENREMOVIES
-const getMoviesFromGenre= (genreId) => {
+const getMoviesFromGenre = (genreId) => {
   console.log("Getting movies from genreId: ", genreId);
   const dataAsText = fs.readFileSync(`data/genre-movies-${genreId}.json`, 'utf8');
-  const genreMovies= JSON.parse(dataAsText);
+  const genreMovies = JSON.parse(dataAsText);
   return genreMovies;
 }
 
@@ -74,7 +81,7 @@ const getMoviesFromGenre= (genreId) => {
 app.get('/discover/movie', (req, res) => {
   console.log("/discover/movie params: ", req.query)
   const genreId = req.query.with_genres; // <-- SECURITY THREAT
-  const genreMovies=getMoviesFrom(genreId);
+  const genreMovies = getMoviesFrom(genreId);
   res.send(genreMovies);
 })
 
@@ -140,7 +147,7 @@ app.get('/recommendations', (req, res) => {
     movie => !votedMovieIds.includes(movie.id.toString())
   ).slice(0, 5);
   console.log("Recommended movies: ", recommendedMovies);
-  res.status(200).json({suggestedMovies: recommendedMovies});
+  res.status(200).json({ suggestedMovies: recommendedMovies });
 });
 
 
@@ -164,3 +171,19 @@ const mostFrequentGenre = (genreIds) => {
   }
   return mostFrequent;
 }
+db.serialize(() => {
+    // Create a table
+    db.run("CREATE TABLE lorem (info genres TEXT)");
+
+    // Insert data into the table
+    const stmt = db.prepare("INSERT INTO lorem (info) VALUES (?)");
+    for (let i = 0; i < 10; i++) {
+        stmt.run("Ipsum " + i);
+    }
+    stmt.finalize();
+
+    // Query data from the table
+    db.each("SELECT movie AS id, info FROM genres", (err, genre) => {
+        console.log(genre.id + ": " + genre.info);
+    });
+});
