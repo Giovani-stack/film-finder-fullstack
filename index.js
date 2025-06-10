@@ -79,17 +79,19 @@ const getMoviesFromGenre = (genreId) => {
 
 
 app.get('/discover/movie', (req, res) => {
-  libraryDB.all("SELECT * FROM movies", (err, movies) => {
-    if (err) {
+  const genreId = req.query.with_genres;
+  libraryDB.all("SELECT * FROM movies Where genre_id= ?", [genreId], (err, movies) => {
+    if (!genreId) {
       console.error("Error fetching movies: ", err);
-      return res.status(500).send("Error fetching movies");
+      return res.status(500).send("Missing genre id");
     }
     console.log("Movies fetched from database: ", movies);
     res.json({ movies });
   });
 });
 
-  /*console.log("/discover/movie params: ", req.query)
+
+  /*console.log("Params: ", req.query)
   const genreId = req.query.with_genres; // <-- SECURITY THREAT
   const genreMovies = getMoviesFrom(genreId);
   res.send(genreMovies);*/
