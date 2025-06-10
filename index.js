@@ -5,10 +5,10 @@ console.log("App starting...");
 const express = require('express');
 const fs = require('node:fs');
 const bodyParser = require('body-parser');
-const sqlite= require('sqlite3');
-const dbPath= ('C:\\Users\\utente\\Desktop\\dev\\database\\database2500')
+const sqlite = require('sqlite3');
+const dbPath = ('C:\\Users\\utente\\Desktop\\dev\\database\\database2500')
 // Create a connection to an in-memory database
-const db = new sqlite.Database(dbPath);
+const libraryDB = new sqlite.Database(dbPath);
 
 const app = express()
 const port = 3000
@@ -19,14 +19,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const tmdbKey = '4048775a0f068af3048837ff0341a4f7';
 const tmdbBaseUrl = 'https://api.themoviedb.org/3';
 
-app.get('/genre/movie/list', async (req, res) => {
-    db.all("SELECT * FROM genres", (err, genres) => {
+app.get('/genre/movie/list',  (req, res) => {
+  libraryDB.all("SELECT * FROM genres", (err, genres) => {
     if (err) {
       console.error("Error fetching genres: ", err);
       return res.status(500).send("Error fetching genres");
     }
     console.log("Genres fetched from database: ", genres);
-  res.json({genres});
+    res.json({ genres });
   });
 });
 
@@ -79,11 +79,21 @@ const getMoviesFromGenre = (genreId) => {
 
 
 app.get('/discover/movie', (req, res) => {
-  console.log("/discover/movie params: ", req.query)
+  libraryDB.all("SELECT * FROM movies", (err, movies) => {
+    if (err) {
+      console.error("Error fetching movies: ", err);
+      return res.status(500).send("Error fetching movies");
+    }
+    console.log("Movies fetched from database: ", movies);
+    res.json({ movies });
+  });
+});
+
+  /*console.log("/discover/movie params: ", req.query)
   const genreId = req.query.with_genres; // <-- SECURITY THREAT
   const genreMovies = getMoviesFrom(genreId);
-  res.send(genreMovies);
-})
+  res.send(genreMovies);*/
+
 
 app.post('/api/movie/like', (req, res) => {
   console.log("MovieId from request body: ", req.body.movieId);
@@ -171,19 +181,3 @@ const mostFrequentGenre = (genreIds) => {
   }
   return mostFrequent;
 }
-db.serialize(() => {
-    // Create a table
-    db.run("CREATE TABLE lorem (info genres TEXT)");
-
-    // Insert data into the table
-    const stmt = db.prepare("INSERT INTO lorem (info) VALUES (?)");
-    for (let i = 0; i < 10; i++) {
-        stmt.run("Ipsum " + i);
-    }
-    stmt.finalize();
-
-    // Query data from the table
-    db.each("SELECT movie AS id, info FROM genres", (err, genre) => {
-        console.log(genre.id + ": " + genre.info);
-    });
-});
