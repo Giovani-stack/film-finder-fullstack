@@ -164,11 +164,12 @@ const displayCarousel = (movieDetails) => {
   carouselDiv.appendChild(carouselItems);
 };
 
-//scrivo una funzione per visualizzare i film preferiti nel nuovo carosello
+//questa è la funzione per il nuovo carosello
 const displayRecommendedMovieCarousel = (movieDetails) => {
 const newCarouselDiv = document.getElementById('favoritecarousel');
 const favoriteCarousel = document.createElement('div');
 favoriteCarousel.setAttribute('class', 'title');
+
 
  for (const movie of movieDetails) {
   console.log("MOVIE:",movie)
