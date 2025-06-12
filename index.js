@@ -76,7 +76,30 @@ const getMoviesFromGenre = (genreId) => {
   console.log("you got the movie id");
   const genreMovies = JSON.parse(dataAsText);
   return genreMovies;
-}
+};
+
+app.patch('/api/movie/:movieid', (req, res) => {
+console.log("REQ ", req);
+res.send("HELLO DUDE!");
+
+
+
+const movieId = req.params.movieid;
+const updatedData = req.body;
+
+ //Update the movie data in the database
+  libraryDB.run("UPDATE movies SET title = ?, genre = ?, year = ? WHERE id = ?",
+    [updatedData.title, updatedData.genre, updatedData.year, movieId],
+    (err) => {
+      if (err) {
+        console.error("Error updating movie: ", err);
+        return res.status(500).send("Error updating movie");
+      }
+      res.send("Movie updated successfully");
+    }
+    );
+});
+
 
 
 app.get('/discover/movie', (req, res) => {
