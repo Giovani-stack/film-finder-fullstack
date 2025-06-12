@@ -99,14 +99,15 @@ const getRecommendedMovies = async () => {
 const likeMovieEndPoint = '/recommendations';
 const urlToFetch= tmdbBaseLocale+ likeMovieEndPoint; 
   try {
-    const response = await fetch(urlToFetch);
+    const response = await fetch (urlToFetch);
     if (response.ok) {
       const suggestedMovies = await response.json();
       console.log(" Going to show new carousel", suggestedMovies.suggestedMovies);
+      //qui ritorna il nuovo carosello
       displayRecommendedMovieCarousel(suggestedMovies.suggestedMovies);
       //return newCarousel;
-    }
 
+    }
   } catch (e) {
     console.log(" Error while getting new carousel: ", e);
   }
