@@ -73,6 +73,7 @@ app.get('/movie/:movieId', async (req, res) => {
 const getMoviesFromGenre = (genreId) => {
   console.log("Getting movies from genreId: ", genreId);
   const dataAsText = fs.readFileSync(`data/genre-movies-${genreId}.json`, 'utf8');
+  console.log("you got the movie id");
   const genreMovies = JSON.parse(dataAsText);
   return genreMovies;
 }
