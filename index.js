@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const tmdbKey = '4048775a0f068af3048837ff0341a4f7';
 const tmdbBaseUrl = 'https://api.themoviedb.org/3';
 
-app.get('/genre/movie/list',  (req, res) => {
+app.get('/genre/movie/list', (req, res) => {
   libraryDB.all("SELECT * FROM genres", (err, genres) => {
     if (err) {
       console.error("Error fetching genres: ", err);
@@ -78,18 +78,32 @@ const getMoviesFromGenre = (genreId) => {
   return genreMovies;
 };
 
-app.patch('/api/movie/:movieid', (req, res) => {
-console.log("REQ ", req);
-res.send("HELLO DUDE!");
+app.patch('/api/movie/:movieId', (req, res) => {
+  console.log("REQ ", req.body);
+  console.log("REQ PARAMS ", req.params.movieId);
+  
+
+const upDateSpec= req.body;
+let setClause= [];
+for (const key in upDateSpec) {
+  setClause.push(`${key} = ${upDateSpec[key]}`);
+};
+
+const setClauseAsString= setClause.join(",");
+console.log("CLAUSE is ", setClause);
+console.log("CLAUSE STRING is ", setClauseAsString);
+//SECURITY THREAT!!!
+const updateSqlString = `UPDATE movies SET ${setClauseAsString} WHERE id = ?`;
 
 
 
-const movieId = req.params.movieid;
-const updatedData = req.body;
 
- //Update the movie data in the database
-  libraryDB.run("UPDATE movies SET title = ?, genre = ?, year = ? WHERE id = ?",
-    [updatedData.title, updatedData.genre, updatedData.year, movieId],
+  const movieId = req.params.movieId;
+  const updatedData = req.body;
+
+  //Update the movie data in the database
+  libraryDB.run("UPDATE movies SET title = ?, overview = ? WHERE id = ?",
+    [updatedData.title, updatedData.overview, movieId],
     (err) => {
       if (err) {
         console.error("Error updating movie: ", err);
@@ -97,7 +111,7 @@ const updatedData = req.body;
       }
       res.send("Movie updated successfully");
     }
-    );
+  );
 });
 
 
@@ -119,10 +133,10 @@ app.get('/discover/movie', (req, res) => {
 });
 
 
-  /*console.log("Params: ", req.query)
-  const genreId = req.query.with_genres; // <-- SECURITY THREAT
-  const genreMovies = getMoviesFrom(genreId);
-  res.send(genreMovies);*/
+/*console.log("Params: ", req.query)
+const genreId = req.query.with_genres; // <-- SECURITY THREAT
+const genreMovies = getMoviesFrom(genreId);
+res.send(genreMovies);*/
 
 
 app.post('/api/movie/like', (req, res) => {
