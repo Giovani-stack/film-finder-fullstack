@@ -99,19 +99,25 @@ const updateSqlString = `UPDATE movies SET ${setClauseAsString} WHERE id = ?`;
 values.push(req.params.movieId);
 console.log("UPDATE SQL STRING is ", updateSqlString);
   //Update the movie data in the database
-   
-   
-   try {
-    await new Promise((resolve, reject) => {
-      db.run(updateSqlString, values, function (err) {
-        if (err) {
-          console.error('SQL Error:', err.message, 'Query:', updateSqlString, 'Params:', [req.params.movieId]);
-          reject(err);
-        } else {
-          resolve("Aggiornamento completato con successo.");
-        }
-      });
+
+
+function dbRunAsync(db, sql, params = []) {
+  return new Promise((resolve, reject) => {
+    db.run(sql, params, function (err) {
+      if (err) {
+        console.error('SQL Error:', err.message, 'Query:', sql, 'Params:', params);
+        reject(err);
+      } else {
+        resolve({ lastID: this.lastID, changes: this.changes });
+      }
     });
+  });
+}
+
+
+   try {
+    await dbRunAsync(libraryDB, updateSqlString, values);
+      console.log("Movie updated successfully");
     res.status(200).send();
   } catch {
     res.status(500).send();
