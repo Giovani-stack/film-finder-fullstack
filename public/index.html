@@ -1,40 +1,64 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Film Finder</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400&family=Fredoka+One&family=Questrial&family=Staatliches&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="public/style.css">
-    <script defer src="https://kit.fontawesome.com/e918d10e90.js" crossorigin="anonymous"></script>
-    <script defer src="public/helpers.js"></script>
-    <script defer src="public/script.js"></script>
-  </head>
-  <body>
-    <header>
-      <h1 id="appTitle">🍿Film Finder🍿</h1>
-    </header>
-    <form id="genreForm">
-      <label>Choose a genre:</label>
-      <select name="genres" id="genres">
-      </select>
-    </form>
-    <button id="playBtn">Let's Play!</button>
-    <ul id="carousel"></ul>
-    <div id="movieInfo">
-      <div id="moviePoster"></div>
-      <div id="movieText"></div>
-    </div>
-    <div id="likeOrDislikeBtns" hidden>
-      <button id="likeBtn"
-        <i class="fa-solid fa-thumbs-up"></i>
-        Like
-      </button>
-      <button id="dislikeBtn" movieid="XYZ">
-        <i class="fa-solid fa-thumbs-down" ></i>
-        Dislike
-      </button>
-    </div>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <title>Film Finder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400&family=Fredoka+One&family=Questrial&family=Staatliches&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="public/style.css">
+  <script defer src="public/helpers.js"></script>
+  <script defer src="public/script.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1 id="appTitle">🍿Film Finder🍿</h1>
+  </header>
+  <form id="genreForm">
+    <label>Choose a genre:</label>
+    <select name="genres" id="genres">
+    </select>
+  </form>
+  <button id="playBtn">Let's Play!</button>
+  <ul id="carousel"></ul>
+  <div id="movieInfo">
+    <div id="moviePoster"></div>
+    <div id="movieTitle"></div>
+    <div id="movieText"></div>
+  </div>
+  <div id="likeOrDislikeBtns" hidden>
+    <button id="likeBtn">
+      Like
+    </button>
+    <button id="dislikeBtn" movieid="XYZ">
+      Dislike</button>
+  </div>
+<ul id="favoritecarousel">
+<!--div class="title"><li class="title"><img src="https://image.tmdb.org/t/p/original//yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg" height="200px"><div class="title"><h4>A Minecraft Movie <br><bt>
+    Warner Bros. Pictures</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//z53D72EAOxGRqdr7KXXWp9dJiDe.jpg" height="200px"><div class="title"><h4>Mission: Impossible - The Final Reckoning <br><bt>
+    Paramount Pictures</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//4iWjGghUj2uyHo2Hyw8NFBvsNGm.jpg" height="200px"><div class="title"><h4>Fountain of Youth <br><bt>
+    Skydance Media</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//wVujUVvY4qvKARAslItQ4ARKqtz.jpg" height="200px"><div class="title"><h4>The Legend of Ochi <br><bt>
+    A24</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//m9EtP1Yrzv6v7dMaC9mRaGhd1um.jpg" height="200px"><div class="title"><h4>Thunderbolts* <br><bt>
+    Marvel Studios</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//dDlfjR7gllmr8HTeN6rfrYhTdwX.jpg" height="200px"><div class="title"><h4>In the Lost Lands <br><bt>
+    Constantin Film</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//aLVkiINlIeCkcZIzb7XHzPYgO6L.jpg" height="200px"><div class="title"><h4>Moana 2 <br><bt>
+    Walt Disney Pictures</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//vWNVHtwOhcoOEUSrY1iHRGbgH8O.jpg" height="200px"><div class="title"><h4>Bambi: A Life in the Woods <br><bt>
+    MC4</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//wxpu7svVqA0ALYpofQBPujGelN3.jpg" height="200px"><div class="title"><h4>Panda Bear in Africa <br><bt>
+    Cool Beans</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//iXbNjhz2KU64vq6NEVVG5pIxggy.jpg" height="200px"><div class="title"><h4>Karate Kid: Legends <br><bt>
+    Columbia Pictures</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//NNxYkU70HPurnNCSiCjYAmacwm.jpg" height="200px"><div class="title"><h4>Mission: Impossible - Dead Reckoning Part One <br><bt>
+    Paramount Pictures</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//lurEK87kukWNaHd0zYnsi3yzJrs.jpg" height="200px"><div class="title"><h4>Mufasa: The Lion King <br><bt>
+    Walt Disney Pictures</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//oxCPceQ4exEuxU3vfRl8doWyqj8.jpg" height="200px"><div class="title"><h4>Detective Chirp &amp; the Golden Beehive <br><bt>
+    Central Partnership</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//xeEw3eLeSFmJgXZzmF2Efww0q3s.jpg" height="200px"><div class="title"><h4>xXx <br><bt>
+    Columbia Pictures</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//2DYgEfgv1bOmgibE1kyPBmzxaf2.jpg" height="200px"><div class="title"><h4>Norbert <br><bt>
+    Capitán Araña</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//vGXptEdgZIhPg3cGlc7e8sNPC2e.jpg" height="200px"><div class="title"><h4>Venom: The Last Dance <br><bt>
+    Columbia Pictures</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//l5uxY5m5OInWpcExIpKG6AR3rgL.jpg" height="200px"><div class="title"><h4>Mission: Impossible <br><bt>
+    Paramount Pictures</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//edKpE9B5qN3e559OuMCLZdW1iBZ.jpg" height="200px"><div class="title"><h4>Mickey 17 <br><bt>
+    Warner Bros. Pictures</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg" height="200px"><div class="title"><h4>Inside Out 2 <br><bt>
+    Walt Disney Pictures</bt></h4></div></li><li class="title"><img src="https://image.tmdb.org/t/p/original//2cxhvwyEwRlysAmRH4iodkvo0z5.jpg" height="200px"><div class="title"><h4>Gladiator II <br><bt>
+    Paramount Pictures</bt></h4></div></li></div--> 
+</ul>
+</body>
 </html>

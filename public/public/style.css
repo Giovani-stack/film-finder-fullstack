@@ -143,3 +143,16 @@ ul::column::scroll-marker {
 ul::column::scroll-marker:target-current {
   background-color: black;
 }
+
+#favoritecarousel {
+  margin-top: 10%;
+  width: 100vw;
+  height: 200px;
+  padding: 10px;
+
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+
+  columns: 1;
+  text-align: center;
+}

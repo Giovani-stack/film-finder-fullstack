@@ -78,40 +78,44 @@ const getMoviesFromGenre = (genreId) => {
   return genreMovies;
 };
 
-app.patch('/api/movie/:movieId', (req, res) => {
-  console.log("REQ ", req.body);
-  console.log("REQ PARAMS ", req.params.movieId);
+
+
+app.patch('/api/movie/:movieId', async (req, res) => {
+   console.log("PATCH /movie/:movieId REQ ", req.body);
+  console.log("PATCH /movie/:movieId movieId", req.params.movieId);
   
 
 const upDateSpec= req.body;
 let setClause= [];
+let values=[];
 for (const key in upDateSpec) {
-  setClause.push(`${key} = ${upDateSpec[key]}`);
+  setClause.push(`${key} = ?`);
+  values.push(upDateSpec[key]);
 };
 
+
 const setClauseAsString= setClause.join(",");
-console.log("CLAUSE is ", setClause);
-console.log("CLAUSE STRING is ", setClauseAsString);
-//SECURITY THREAT!!!
 const updateSqlString = `UPDATE movies SET ${setClauseAsString} WHERE id = ?`;
-
-
-
-
-  const movieId = req.params.movieId;
-  const updatedData = req.body;
-
+values.push(req.params.movieId);
+console.log("UPDATE SQL STRING is ", updateSqlString);
   //Update the movie data in the database
-  libraryDB.run("UPDATE movies SET title = ?, overview = ? WHERE id = ?",
-    [updatedData.title, updatedData.overview, movieId],
-    (err) => {
-      if (err) {
-        console.error("Error updating movie: ", err);
-        return res.status(500).send("Error updating movie");
-      }
-      res.send("Movie updated successfully");
-    }
-  );
+   
+   
+   try {
+    await new Promise((resolve, reject) => {
+      db.run(updateSqlString, values, function (err) {
+        if (err) {
+          console.error('SQL Error:', err.message, 'Query:', updateSqlString, 'Params:', [req.params.movieId]);
+          reject(err);
+        } else {
+          resolve("Aggiornamento completato con successo.");
+        }
+      });
+    });
+    res.status(200).send();
+  } catch {
+    res.status(500).send();
+  }
 });
 
 
